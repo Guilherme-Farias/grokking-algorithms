@@ -1,7 +1,7 @@
-from typing import Sequence
+from typing import List
 
 
-def binary_search(arr: Sequence[int], target: int) -> int | None:
+def binary_search(arr: List[int], target: int) -> int | None:
     low = 0
     high = len(arr) - 1
 

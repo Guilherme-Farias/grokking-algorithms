@@ -1,4 +1,4 @@
-from src.core.binary_search.binary_search_v1_leet_code import binary_search
+from src.core.binary_search.v1.binary_search import binary_search
 
 
 def test_binary_search_found():

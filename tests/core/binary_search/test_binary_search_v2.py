@@ -1,6 +1,6 @@
 import pytest
 
-from src.core.binary_search.binary_search_v2_clean_code import (
+from src.core.binary_search.v2.binary_search import (
     IterativeBinarySearch,
     RecursiveBinarySearch,
 )
