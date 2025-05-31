@@ -1,32 +1,37 @@
 from typing import Generic, Iterator, List, Optional, TypeVar
 
 from src.core._common.base_structures import AbstractList
-from src.core._common.entities import ListNode
+from src.core._common.entities import DoublyListNode
 
 T = TypeVar("T")
 
 
-class LinkedList(AbstractList[T], Generic[T]):
+class DoublyLinkedList(AbstractList[T], Generic[T]):
     def __init__(self, items: Optional[List[T]] = None) -> None:
-        self.head: Optional[ListNode[T]] = None
-        self.tail: Optional[ListNode[T]] = None
+        self.head: Optional[DoublyListNode[T]] = None
+        self.tail: Optional[DoublyListNode[T]] = None
         self._length: int = 0
         super().__init__(items)
 
     def append(self, value: T) -> None:
-        new_node = ListNode(value)
+        new_node = DoublyListNode(value)
         if self._length == 0:
             self.head = self.tail = new_node
         else:
+            new_node.prev = self.tail
             self.tail.next = new_node
             self.tail = new_node
         self._length += 1
 
     def prepend(self, value: T) -> None:
-        new_node = ListNode(value, self.head)
-        self.head = new_node
+        new_node = DoublyListNode(value, next=self.head)
+
         if self._length == 0:
             self.tail = new_node
+        else:
+            self.head.prev = new_node
+
+        self.head = new_node
         self._length += 1
 
     def insert(self, index: int, value: T) -> None:
@@ -39,30 +44,24 @@ class LinkedList(AbstractList[T], Generic[T]):
             self.append(value)
             return
 
-        new_node = ListNode(value)
         prev = self.head
         for _ in range(index - 1):
             prev = prev.next
-
-        new_node.next = prev.next
+        new_node = DoublyListNode(value, prev=prev, next=prev.next)
+        prev.next.prev = new_node
         prev.next = new_node
         self._length += 1
 
     def pop(self) -> Optional[T]:
         if self._length == 0:
             return None
-        if self._length == 1:
-            val = self.head.value
-            self.head = self.tail = None
-            self._length = 0
-            return val
-        prev = self.head
-        while prev.next and prev.next is not self.tail:
-            prev = prev.next
-
         val = self.tail.value
-        prev.next = None
-        self.tail = prev
+        if self._length == 1:
+            self.head = self.tail = None
+        else:
+            self.tail = self.tail.prev
+            self.tail.next = None
+
         self._length -= 1
         return val
 
@@ -70,9 +69,11 @@ class LinkedList(AbstractList[T], Generic[T]):
         if self._length == 0:
             return None
         val = self.head.value
-        self.head = self.head.next
-        if not self.head:
-            self.tail = None
+        if self._length == 1:
+            self.head = self.tail = None
+        else:
+            self.head = self.head.next
+            self.head.prev = None
         self._length -= 1
         return val
 
@@ -92,11 +93,12 @@ class LinkedList(AbstractList[T], Generic[T]):
 
         if prev.next:
             prev.next = prev.next.next
+            prev.next.prev = prev
             self._length -= 1
             return True
         return False
 
-    def find(self, value: T) -> Optional[ListNode[T]]:
+    def find(self, value: T) -> Optional[DoublyListNode[T]]:
         current = self.head
         while current:
             if current.value == value:
@@ -122,15 +124,11 @@ class LinkedList(AbstractList[T], Generic[T]):
         return True
 
     def reverse(self) -> None:
-        prev = None
         current = self.head
-        self.tail = self.head
+        self.head, self.tail = self.tail, self.head
         while current:
-            next_node = current.next
-            current.next = prev
-            prev = current
-            current = next_node
-        self.head = prev
+            current.prev, current.next = current.next, current.prev
+            current = current.prev
 
     def clear(self) -> None:
         self.head = self.tail = None
