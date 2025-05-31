@@ -1,6 +1,6 @@
 from typing import List, Optional, TypeVar
 
-from src.core.binary_search.v3.binary_search.base_binary_search import BaseBinarySearch
+from .base_binary_search import BaseBinarySearch
 
 T = TypeVar("T")
 

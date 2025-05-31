@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Generic, List, Optional, TypeVar
 
-from src.core.binary_search.v3.comparator.comparator import Comparator
+from src.core._common.comparator import Comparator
 
 T = TypeVar("T")
 

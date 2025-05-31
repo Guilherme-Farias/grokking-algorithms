@@ -1,16 +1,9 @@
 import pytest
 
-from src.core.binary_search.v3.binary_search.iterative_binary_search import (
-    IterativeBinarySearch,
-)
-from src.core.binary_search.v3.binary_search.recursive_binary_search import (
-    RecursiveBinarySearch,
-)
-from src.core.binary_search.v3.comparator.int_comparator import IntComparator
-from src.core.binary_search.v3.comparator.product_by_id_comparator import (
-    ProductByIdComparator,
-)
-from src.core.binary_search.v3.entities.product import Product
+from src.core._common.comparator import IntComparator, ProductByIdComparator
+from src.core._common.entities import Product
+from src.core.binary_search.v3.iterative_binary_search import IterativeBinarySearch
+from src.core.binary_search.v3.recursive_binary_search import RecursiveBinarySearch
 
 
 @pytest.mark.parametrize(

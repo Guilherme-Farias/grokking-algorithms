@@ -1,25 +1,23 @@
-from typing import Callable, Generic, Iterator, List, Optional, TypeVar
+from typing import Generic, Iterator, List, Optional, TypeVar
 
-from src.core.linked_list.common.list_node import ListNode
+from src.core._common.base_structures import AbstractList
+from src.core._common.entities import ListNode
 
 T = TypeVar("T")
 
 
-class LinkedList(Generic[T]):
+class LinkedList(AbstractList[T], Generic[T]):
     def __init__(self, items: Optional[List[T]] = None) -> None:
         self.head: Optional[ListNode[T]] = None
         self.tail: Optional[ListNode[T]] = None
         self._length: int = 0
-        if items:
-            for item in items:
-                self.append(item)
+        super().__init__(items)
 
     def append(self, value: T) -> None:
         new_node = ListNode(value)
-        if not self.head:
+        if self._length == 0:
             self.head = self.tail = new_node
         else:
-            assert self.tail
             self.tail.next = new_node
             self.tail = new_node
         self._length += 1
@@ -44,7 +42,6 @@ class LinkedList(Generic[T]):
         new_node = ListNode(value)
         prev = self.head
         for _ in range(index - 1):
-            assert prev
             prev = prev.next
 
         new_node.next = prev.next
@@ -52,19 +49,17 @@ class LinkedList(Generic[T]):
         self._length += 1
 
     def pop(self) -> Optional[T]:
-        if not self.head:
+        if self._length == 0:
             return None
         if self._length == 1:
             val = self.head.value
             self.head = self.tail = None
             self._length = 0
             return val
-
         prev = self.head
-        while prev.next and prev.next.next:
+        while prev.next and prev.next is not self.tail:
             prev = prev.next
 
-        assert self.tail
         val = self.tail.value
         prev.next = None
         self.tail = prev
@@ -72,7 +67,7 @@ class LinkedList(Generic[T]):
         return val
 
     def pop_first(self) -> Optional[T]:
-        if not self.head:
+        if self._length == 0:
             return None
         val = self.head.value
         self.head = self.head.next
@@ -82,7 +77,7 @@ class LinkedList(Generic[T]):
         return val
 
     def remove(self, value: T) -> bool:
-        if not self.head:
+        if self._length == 0:
             return False
         if self.head.value == value:
             self.pop_first()
@@ -113,21 +108,17 @@ class LinkedList(Generic[T]):
             return None
         current = self.head
         for _ in range(index):
-            assert current
             current = current.next
-        return current.value if current else None
+        return current.value
 
     def set(self, index: int, value: T) -> bool:
         if index < 0 or index >= self._length:
             return False
         current = self.head
         for _ in range(index):
-            assert current
             current = current.next
-        if current:
-            current.value = value
-            return True
-        return False
+        current.value = value
+        return True
 
     def reverse(self) -> None:
         prev = None
@@ -173,9 +164,3 @@ class LinkedList(Generic[T]):
 
     def __contains__(self, value: T) -> bool:
         return self.find(value) is not None
-
-    def for_each(self, func: Callable[[T], None]) -> None:
-        current = self.head
-        while current:
-            func(current.value)
-            current = current.next

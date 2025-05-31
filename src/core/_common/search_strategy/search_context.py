@@ -1,6 +1,6 @@
 from typing import Generic, List, Optional, TypeVar
 
-from src.core.binary_search.v3.search_strategy.search_strategy import SearchStrategy
+from .search_strategy import SearchStrategy
 
 T = TypeVar("T")
 

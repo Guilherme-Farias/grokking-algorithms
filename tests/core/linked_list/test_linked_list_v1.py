@@ -165,7 +165,7 @@ def test_len():
 # ---------- __iter__ ----------
 def test_iteration():
     ll = LinkedList([1, 2, 3])
-    values = [x for x in ll]
+    values = [x for x in ll]  # noqa: C416
     assert values == [1, 2, 3]
 
 
@@ -203,11 +203,3 @@ def test_contains_true():
 def test_contains_false():
     ll = LinkedList([1])
     assert 99 not in ll
-
-
-# ---------- for_each ----------
-def test_for_each():
-    ll = LinkedList([1, 2, 3])
-    result = []
-    ll.for_each(lambda x: result.append(x * 2))
-    assert result == [2, 4, 6]

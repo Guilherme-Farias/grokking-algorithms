@@ -1,4 +1,4 @@
-from src.core.binary_search.v3.comparator.comparator import Comparator
+from .comparator import Comparator
 
 
 class IntComparator(Comparator[int]):

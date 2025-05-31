@@ -3,14 +3,10 @@ import time
 import numpy as np
 import pytest
 
-from src.core.binary_search.v3.binary_search.iterative_binary_search import (
-    IterativeBinarySearch,
-)
-from src.core.binary_search.v3.binary_search.recursive_binary_search import (
-    RecursiveBinarySearch,
-)
-from src.core.binary_search.v3.comparator.int_comparator import IntComparator
-from src.core.binary_search.v3.search_strategy.search_context import SearchContext
+from src.core._common.comparator import IntComparator
+from src.core._common.search_strategy import SearchContext
+from src.core.binary_search.v3.iterative_binary_search import IterativeBinarySearch
+from src.core.binary_search.v3.recursive_binary_search import RecursiveBinarySearch
 
 n = 1000000
 list_with_n_items = np.arange(n + 1).tolist()
